@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context
+                            http://www.springframework.org/schema/context/spring-context.xsd
+                            http://www.springframework.org/schema/tx
+                            http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <!-- 1.配置数据源 -->
+    <context:property-placeholder location="classpath:db.properties"/>
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+
+        <!-- 配置基本属性 -->
+        <property name="url" value="${jdbc_url}"/>
+        <property name="connectionProperties" value="${jdbc_connectionProperties}"/>
+        <property name="driverClassName" value="${jdbc_driverClassName}"/>
+        <property name="username" value="${jdbc_username}"/>
+        <property name="password" value="${jdbc_password}"/>
+
+        <!-- 初始化大小，最小，最大 -->
+        <property name="initialSize" value="10"/> <!-- // 初始化时建立数据库连接的个数 -->
+        <property name="maxActive" value="50"/> <!-- // 最大连接池的数量 -->
+        <property name="minIdle" value="10"/> <!-- // 最小连接池的数量 -->
+
+        <!-- 获取连接等待超时时间 -->
+        <property name="maxWait" value="60000"/><!-- // 获取连接时最长等待时间 -->
+
+        <!-- 设置间隔多久才能进行一次检测，检测需要关闭的空闲连接 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+
+        <!-- 配置一个连接在池中的最小生存时间 -->
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+
+        <!-- 申请连接检测，如果空闲时间大于timeBetweenEvictionRunmillis,执行validateionQuery是否有效-->
+        <property name="testWhileIdle" value="true"/>
+
+        <!-- 申请连接时执行validationQuery检测，设置为true会影响性能 -->
+        <property name="testOnBorrow" value="false"/>
+
+        <!-- 归还连接时候执行validateQuery检测连接是否有效 -->
+        <property name="testOnReturn" value="false"/>
+
+        <!-- 是否缓存preparedstatements -->
+        <property name="poolPreparedStatements" value="true"/> <!-- // 对支持游标的数据库性能影响较大，特别是oracle，mysql5.5一下不支持 -->
+
+        <!-- 要启用PSCache 必须配置大于0, -->
+        <property name="maxOpenPreparedStatements" value="20"/> <!-- // 不会存在pscache内存占用过多的问题可以设置大一些 -->
+
+        <property name="asyncInit" value="true"/>
+    </bean>
+
+
+    <!-- 2.mybatis的整合配置 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 引用数据源 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 指定mybatis配置文件所在的位置 -->
+        <property name="configLocation" value="classpath:mybatis/config.xml"/>
+        <!-- 扫描映射文件 -->
+        <property name="mapperLocations" value="classpath:mapping/*.xml"/>
+
+    </bean>
+
+    <!-- 3.dao层的配置 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 指定dao所在包 -->
+        <property name="basePackage" value="com.chenpeng.dao"/>
+        <!-- 指定sqlSessionFactory配置bean的名称,注意这里不是引用sqlSessionFactory -->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+
+    <!-- 4.配置service -->
+    <context:component-scan base-package="com.chenpeng.service"/>
+
+
+    <!-- 5.事务配置 -->
+    <bean id="tx" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 引用dataSource -->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 使用事务注解 -->
+    <tx:annotation-driven transaction-manager="tx" proxy-target-class="true"/>
+
+
+</beans>

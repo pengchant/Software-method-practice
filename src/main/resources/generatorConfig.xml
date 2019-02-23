@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <!-- 导入属性配置 -->
+    <properties resource="generator.properties"></properties>
+
+    <!-- 指定数据库jdbc驱动jar包的位置 -->
+    <classPathEntry location="${jdbc.driverLocation}" />
+
+    <context id="default" targetRuntime="MyBatis3">
+
+        <!-- optional,旨在创建class时，对注释进行控制 -->
+        <commentGenerator>
+            <property name="suppressDate" value="true" />
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+        <!-- jdbc的数据库连接 -->
+        <jdbcConnection driverClass="${jdbc.driverClass}"
+                        connectionURL="${jdbc.connectionURL}"
+                        userId="${jdbc.userId}"
+                        password="${jdbc.password}">
+        </jdbcConnection>
+
+        <!-- 类型处理，在数据库类型和java类型之间的转换控制 -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- java 模型生成器，用来生成含有主键的key的类 -->
+        <javaModelGenerator targetPackage="com.chenpeng.domain"
+                            targetProject="src/main/java">
+            <!-- 是否允许子包 -->
+            <property name="enableSubPackages" value="false"/>
+            <!-- 是否对model添加构造函数 -->
+            <property name="constructorBased" value="true"/>
+            <!-- 是否对类char类型的列进行trim操作 -->
+            <property name="trimStrings" value="true"/>
+            <!-- 建立model对象是否不可改变，生成的对象不会有setter方法 -->
+            <property name="immutable" value="false"/>
+        </javaModelGenerator>
+
+        <!-- 生成map映射文件 -->
+        <sqlMapGenerator targetPackage="mapping"
+                         targetProject="src/main/resources">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!-- 生成map接口 -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.chenpeng.dao"
+                             targetProject="src/main/java">
+            <property name="enableSubPakages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- 以下为table -->
+        <!--<table tableName="account" domainObjectName="Account"-->
+               <!--enableCountByExample="false"-->
+               <!--enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false"-->
+               <!--selectByExampleQueryId="false"></table>-->
+
+        <!--<table tableName="answeritem" domainObjectName="Answeritem"-->
+               <!--enableCountByExample="false"-->
+               <!--enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false"-->
+               <!--selectByExampleQueryId="false"></table>-->
+
+        <!--<table tableName="question" domainObjectName="Question"-->
+               <!--enableCountByExample="false"-->
+               <!--enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false"-->
+               <!--selectByExampleQueryId="false"></table>-->
+
+        <!--<table tableName="quitem" domainObjectName="Quitem"-->
+               <!--enableCountByExample="false"-->
+               <!--enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false"-->
+               <!--enableSelectByExample="false"-->
+               <!--selectByExampleQueryId="false"></table>-->
+
+        <table tableName="testpaper" domainObjectName="TestPaper"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"></table>
+
+    </context>
+</generatorConfiguration>

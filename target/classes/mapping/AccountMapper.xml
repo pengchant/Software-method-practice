@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chenpeng.dao.AccountMapper">
+    <resultMap id="BaseResultMap" type="com.chenpeng.domain.Account">
+        <constructor>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="uid" jdbcType="CHAR" javaType="java.lang.String"/>
+            <arg column="upwd" jdbcType="CHAR" javaType="java.lang.String"/>
+            <arg column="uname" jdbcType="CHAR" javaType="java.lang.String"/>
+            <arg column="type" jdbcType="SMALLINT" javaType="java.lang.Short"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, uid, upwd, uname, type
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from account
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from account
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.chenpeng.domain.Account">
+    insert into account (id, uid, upwd, uname, 
+      type)
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=CHAR}, #{upwd,jdbcType=CHAR}, #{uname,jdbcType=CHAR}, 
+      #{type,jdbcType=SMALLINT})
+  </insert>
+    <insert id="insertSelective" parameterType="com.chenpeng.domain.Account">
+        insert into account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="uid != null">
+                uid,
+            </if>
+            <if test="upwd != null">
+                upwd,
+            </if>
+            <if test="uname != null">
+                uname,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="uid != null">
+                #{uid,jdbcType=CHAR},
+            </if>
+            <if test="upwd != null">
+                #{upwd,jdbcType=CHAR},
+            </if>
+            <if test="uname != null">
+                #{uname,jdbcType=CHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=SMALLINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.chenpeng.domain.Account">
+        update account
+        <set>
+            <if test="uid != null">
+                uid = #{uid,jdbcType=CHAR},
+            </if>
+            <if test="upwd != null">
+                upwd = #{upwd,jdbcType=CHAR},
+            </if>
+            <if test="uname != null">
+                uname = #{uname,jdbcType=CHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=SMALLINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.chenpeng.domain.Account">
+    update account
+    set uid = #{uid,jdbcType=CHAR},
+      upwd = #{upwd,jdbcType=CHAR},
+      uname = #{uname,jdbcType=CHAR},
+      type = #{type,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+    <!-- 查询账户信息 -->
+    <select id="selectAccount" parameterType="Account" resultType="Account">
+        select
+        <include refid="Base_Column_List"/>
+        from account
+        where uid=#{uid} and upwd=#{upwd}
+    </select>
+
+</mapper>

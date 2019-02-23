@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chenpeng.dao.QuitemMapper">
+    <resultMap id="BaseResultMap" type="com.chenpeng.domain.Quitem">
+        <constructor>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="content" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="num" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="counter" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="questionid" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, content, num, counter, questionid
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from quitem
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from quitem
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.chenpeng.domain.Quitem" useGeneratedKeys="true" keyProperty="id">
+    insert into quitem (id, content, num, 
+      counter, questionid)
+    values (#{id,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, 
+      #{counter,jdbcType=INTEGER}, #{questionid,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.chenpeng.domain.Quitem" useGeneratedKeys="true" keyProperty="id">
+        insert into quitem
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="num != null">
+                num,
+            </if>
+            <if test="counter != null">
+                counter,
+            </if>
+            <if test="questionid != null">
+                questionid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="num != null">
+                #{num,jdbcType=INTEGER},
+            </if>
+            <if test="counter != null">
+                #{counter,jdbcType=INTEGER},
+            </if>
+            <if test="questionid != null">
+                #{questionid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.chenpeng.domain.Quitem">
+        update quitem
+        <set>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="num != null">
+                num = #{num,jdbcType=INTEGER},
+            </if>
+            <if test="counter != null">
+                counter = #{counter,jdbcType=INTEGER},
+            </if>
+            <if test="questionid != null">
+                questionid = #{questionid,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.chenpeng.domain.Quitem">
+    update quitem
+    set content = #{content,jdbcType=VARCHAR},
+      num = #{num,jdbcType=INTEGER},
+      counter = #{counter,jdbcType=INTEGER},
+      questionid = #{questionid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+    <!-- 查询题目选项 -->
+    <select id="selectQuestionItems"
+            parameterType="Integer"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from quitem
+        where questionid=#{questionid}
+        order by id asc
+    </select>
+
+</mapper>

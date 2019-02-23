@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="error"> <!-- // status:用来指定log4j本身打印日志的级别,还有一个属性为monitorinterval用于指定log4j自动重新配置检测间隔时间单位是s最小是5s -->
+
+    <!--A.先定义所有的appender-->
+    <appenders><!-- // console用来定义出书到控制台的appender，file用来定义输出到指定位置的appender，rollingfile用来定义超过指定大小自动删除创建新的appender -->
+
+        <!-- 1.定义一个控制台输出配置 -->
+        <Console name="Console" target="SYSTEM_OUT"><!-- // name:指定名称，target：SYSTEM_OUT/SYSTEM_ERR，PatternLayout：输出格式 -->
+            <!-- 控制输出级别。level表示匹配的级别，onMatch为ACCEPT表示级别匹配则接受，onMisMatch为DENY表示不匹配就拒绝 -->
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMissmatch="DENY" />
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+        </Console>
+
+        <!-- 2.定义文件输出配置，name表示该appender名称，fileName指定日志名，append表示是否追加，这里设置为false表示不追加，那么每次运行程序都会清空之前的内容，适合测试使用 -->
+        <File name="log" fileName="log/test.log" append="false">
+            <!-- 下面同样是配置输出级别和输出格式 -->
+            <ThresoldFilter level="info" onMatch="ACCEPT" onMissmatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M -%msg%xEx%n" />
+        </File>
+
+        <!-- 3.定义RollingFile 的 Appender。可进行存档 -->
+        <RollingFile name="RollingFile" fileName="logs/app.log"
+                     filePattern="log/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+            <!-- 定义size大小 -->
+            <SizeBasedTriggeringPolicy size="5MB"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+        </RollingFile>
+
+    </appenders>
+
+    <!-- B.定义logger并引用appender -->
+    <loggers>
+        <!-- 使用默认的root -->
+        <root level="trace">
+            <appender-ref ref="Console" />
+            <appender-ref ref="log" />
+            <appender-ref ref="RollingFile"/>
+        </root>
+    </loggers>
+
+</configuration>
